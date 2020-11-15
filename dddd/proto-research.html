@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>설문 조사</title>
+        <style>
+            * {
+            margin : 6px ;
+            }
+
+            header{
+                padding-top : 7px;
+                background-color: white;
+                text-align: center;
+            }
+
+            body{
+                background-color: white;
+                text-align: center;
+            }
+
+            footer {
+            padding-top: 17px;
+            text-align : center;
+            }
+
+            .box {
+                background-color:lightblue;
+                text-align: center;
+                padding: 5px;
+            }
+        </style>
+    </head>
+    <header>
+        <img src=logo.png alt="Page Logo" style=" height: 140px; ">
+    </header>
+    <body>
+        <section class="box">
+            <h2 style="color: black"> AI 취향 분석 설문지 </h2>
+        </section>
+        <section class="box">
+            <div id="alergy">
+                <h3 style="color: black">Q. 이 중에 당신이 가지고 있는 알러지가 있나요?</h3>
+                <form name="alergy">
+
+                    <input type="button" value="없음">
+                    <input type="button" value="땅콩">
+                    <input type="button" value="계란">
+                    <input type="button" value="우유">
+                    <input type="button" value="밀가루">
+                    <input type="button" value="갑각류">
+                    
+                </form>
+            </div>
+            <br>
+            <div id="spicy">
+                <h3 style="color: black">Q. 어느 정도 매운 음식을 선호하나요? </h3>
+                <form name="spicy">
+                    <input type="button" value="맵찔이">
+                    <input type="button" value="신라면">
+                    <input type="button" value="불닭">
+                    <input type="button" value="핵!불!닭">
+                </form>
+            </div>
+            <br>
+            <div id="appetite">
+                <h3 style="color:black">Q. 당신의 음식 취향을 알려주세요!</h3>
+                <div id="appetite">
+                    <form name="country">
+                        <div>
+                            <h4>한식</h4>
+                            <input type="button" value= "먹긴 먹음">
+                            <input type="button" value= "적당히 먹음">
+                            <input type="button" value= "자주 먹음">
+                            <input type="button" value= "아주 좋아함">
+                        </div>
+                        <div>
+                            <h4>중식</h4>
+                            <input type="button" value= "먹긴 먹음">
+                            <input type="button" value= "적당히 먹음">
+                            <input type="button" value= "자주 먹음">
+                            <input type="button" value= "아주 좋아함">
+                        </div>
+                        <div>
+                            <h4>일식</h4>
+                            <input type="button" value= "먹긴 먹음">
+                            <input type="button" value= "적당히 먹음">
+                            <input type="button" value= "자주 먹음">
+                            <input type="button" value= "아주 좋아함">
+                        </div>
+                        <div>
+                            <h4>양식</h4>
+                            <input type="button" value= "먹긴 먹음">
+                            <input type="button" value= "적당히 먹음">
+                            <input type="button" value= "자주 먹음">
+                            <input type="button" value= "아주 좋아함">
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <br>
+        </section>
+
+       <footer>
+            <button
+            type="button"
+            style="color: white; background: orange; font-size: 2em;
+            border-radius: 0.5em; padding: 5px 25px; margin: 20px"
+            onclick="window.location.href='main page.html'">메인 화면</button>
+            <button
+            type="button"
+            style="color: white; background: orange; font-size: 2em;
+            border-radius: 0.5em; padding: 5px 22px; margin: 20px;"
+            onclick="window.location.href='recipe_recommend.html'">요리 추천</button>
+        </footer>
+    </body>
+</html>
+
+<script>
+  var div2 = document.getElementsByClassName('div2');
+
+      for (var i = 0; i < div2.length; i++) {
+        div2[i].addEventListener('click', function(){
+          for (var j = 0; j < div2.length; j++) {
+            div2[j].style.color = "black";
+          }
+          this.style.color = "gold";
+        })
+      }
+</script>

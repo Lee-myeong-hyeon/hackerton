@@ -1,0 +1,115 @@
+@{
+    ViewBag.Title = "Index";
+    Layout = null;
+}
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+
+<!-- CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.7.7/xlsx.core.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xls/0.7.4-a/xls.core.min.js"></script>
+
+<input type="file" id="excelfile" />
+<input type="button" id="viewfile" value="Export To Table" onclick="ExportToTable()" />
+<br />
+<br />
+<table id="exceltable"></table>
+
+<select id="selectUserList" name="selectUserList" multiple class="form-control" style="height:300px; width:500px;"></select>
+<script>
+function exportToTable() {
+    var regex = /^([a-zA-Z0-9가-힣\s_\\.\-:()])+(.xlsx|.xls|.xlsm)$/; // 한글도 가능
+    /*Checks whether the file is a valid excel file*/
+    if (regex.test($("#excelfile").val().toLowerCase())) {
+        var xlsxflag = false; /*Flag for checking whether excel is .xls format or .xlsx format*/
+        if ($("#excelfile").val().toLowerCase().indexOf(".xlsx") > 0 || $("#excelfile").val().toLowerCase().indexOf(".xlsm") > 0) {
+            xlsxflag = true;
+        }
+        /*Checks whether the browser supports HTML5*/
+        if (typeof (FileReader) != "undefined") {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                var data = e.target.result;
+                /*Converts the excel data in to object*/
+                if (xlsxflag) {
+                    var workbook = XLSX.read(data, { type: 'binary' });
+                }
+                else {
+                    var workbook = XLS.read(data, { type: 'binary' });
+                }
+                /*Gets all the sheetnames of excel in to a variable*/
+                var sheet_name_list = workbook.SheetNames;
+
+                var cnt = 0; /*This is used for restricting the script to consider only first sheet of excel*/
+                sheet_name_list.forEach(function (y) { /*Iterate through all sheets*/
+                    /*Convert the cell value to Json*/
+                    if (xlsxflag) {
+                        var exceljson = XLSX.utils.sheet_to_json(workbook.Sheets[y]);
+                    }
+                    else {
+                        var exceljson = XLS.utils.sheet_to_row_object_array(workbook.Sheets[y]);
+                    }
+                    if (exceljson.length > 0 && cnt == 0) {
+                        BindTable(exceljson, '#exceltable');
+                        cnt++;
+                    }
+                });
+                $('#exceltable').show();
+            }
+            if (xlsxflag) {/*If excel file is .xlsx extension than creates a Array Buffer from excel*/
+                reader.readAsArrayBuffer($("#excelfile")[0].files[0]);
+            }
+            else {
+                reader.readAsBinaryString($("#excelfile")[0].files[0]);
+            }
+
+            var fileName = $("#excelfile").val().split('\\');
+            $("#excelfileName").text(fileName[fileName.length - 1]);
+        }
+        else {
+            alert("Sorry! Your browser does not support HTML5!");
+        }
+    }
+    else {
+        alert("Please upload a valid Excel file!");
+    }
+}
+
+function BindTable(jsondata) {
+
+    $("#selectUserList").empty(); // 우선 비우고
+
+    var columns = BindTableHeader(jsondata);
+
+    for (var i = 0; i < jsondata.length; i++) {
+
+        // 처음엔 Property Name으로 바로 접근했는데 대소문자 어긋나면 undefined 에러 뜨니까 인덱스로 접근하도록 변경
+        //var getPcID = jsondata[i].pcID;
+        //var getName = jsondata[i].managerName;
+
+        var getPcID = jsondata[i][columns[0]];
+        var getName = jsondata[i][columns[1]];
+
+
+        $('#selectUserList').append('<option value=' + getPcID + '  >' + getName + '</option>');    // 리스트 박스 추가
+
+    }
+}
+
+// Json to Object
+function BindTableHeader(jsondata) {
+    var columnSet = [];
+    for (var i = 0; i < jsondata.length; i++) {
+        var rowHash = jsondata[i];
+        for (var key in rowHash) {
+            if (rowHash.hasOwnProperty(key)) {
+                if ($.inArray(key, columnSet) == -1) {/*Adding each unique column names to a variable array*/
+                    columnSet.push(key);
+                }
+            }
+        }
+    }
+
+    return columnSet;
+}
+</script>
